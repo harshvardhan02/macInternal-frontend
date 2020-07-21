@@ -42,12 +42,14 @@ export default class updatePost extends Component {
     }
 
     componentDidUpdate(prevProps){
-    	console.log(prevProps.postById)
+    	console.log(prevProps)
+        console.log(this.props)
     	if(this.props.postById !== prevProps.postById) {
+            const { title, body } = this.props.postById
     		this.setState({ 
     			posts: this.props.postById, 
-    			title: this.props.postById.title, 
-    			body: this.props.postById.body
+    			title: title, 
+    			body: body
     		})
     	}
     }
