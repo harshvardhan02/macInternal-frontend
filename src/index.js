@@ -46,7 +46,7 @@ class Root extends React.Component {
 			<BrowserRouter>
 				<Header />
 					<Switch>
-						// <PrivateRoute exact path="/" component={Dashboard} {...this.props} />
+						{/*<PrivateRoute exact path="/" component={Dashboard} {...this.props} />*/}
 						<Route exact path={`${process.env.PUBLIC_URL}/`} component={HomeContainer} />
 						<Route exact path={`${process.env.PUBLIC_URL}/timeslot`} component={TimeSlotContainer} />
 						<Route exact path={`${process.env.PUBLIC_URL}/createpost`} component={CreatePostContainer} />

@@ -6,11 +6,12 @@ export default class updatePost extends Component {
 	constructor(props) {
         super(props);
         this.state = {
+            open: false,
             vertical: 'bottom',
             horizontal: 'center',
             title: '',
             body: '',
-            posts: []           
+            posts: []
         }
     }
 
@@ -49,9 +50,15 @@ export default class updatePost extends Component {
     		this.setState({ 
     			posts: this.props.postById, 
     			title: title, 
-    			body: body
+    			body: body,
     		})
-    	}
+    	}        
+    }
+
+    handleClose = () => {
+        this.setState({
+            open: false
+        })
     }
 
     onSubmit = e => {
@@ -61,6 +68,9 @@ export default class updatePost extends Component {
     	const data = { title, body };
     	console.log(data)
     	this.props.updatePosts(id, data);
+        this.setState({
+            open: true
+        })
     }
 
 	render(){

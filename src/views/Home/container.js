@@ -5,7 +5,8 @@ import { getPosts, deletePost } from '../../store/user/duck'
 const HomeContainer = connect(
 	//map state to props
 	state => ({
-		posts: state.user.posts
+		posts: state.user.posts,
+		error: state.user.error
 	}),
 	//map dispatch to props
 	{

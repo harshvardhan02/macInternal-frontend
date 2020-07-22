@@ -27,13 +27,13 @@ export const UPDATE_POST = 'machineTest/user/UPDATE_POST'
 export const UPDATE_POST_SUCCESS = 'machineTest/user/UPDATE_POST_SUCCESS' 
 export const UPDATE_POST_ERROR = 'machineTest/user/UPDATE_POST_ERROR'
 
-export const GET_POST_BY_ID = 'machineTest/user/UPDATE_POST' 
+export const GET_POST_BY_ID = 'machineTest/user/GET_POST_BY_ID' 
 export const GET_POST_BY_ID_SUCCESS = 'machineTest/user/GET_POST_BY_ID_SUCCESS' 
 export const GET_POST_BY_ID_ERROR = 'machineTest/user/GET_POST_BY_ID_ERROR'
 
 export const DELETE_POST = 'machineTest/user/DELETE_POST'
-export const DELETE_POST_SUCCESS = 'machineTest/user/DELETE_POST'
-export const DELETE_POST_ERROR = 'machineTest/user/DELETE_POST'
+export const DELETE_POST_SUCCESS = 'machineTest/user/DELETE_POST_SUCCESS'
+export const DELETE_POST_ERROR = 'machineTest/user/DELETE_POST_ERROR'
 
 
 /***********************************
@@ -123,7 +123,7 @@ class InitialState extends Record(InitialStateInterface) {
       const { payload } = action
       return state
         .set('postPhase', ERROR)
-        .set('error', payload.message) 
+        .set('error', 'Something went wrong') 
     }
 
     case UPDATE_POST: {
@@ -139,6 +139,7 @@ class InitialState extends Record(InitialStateInterface) {
         return state
           .set('updatePostPhase', SUCCESS)
           .set('updatePostMessage', payload.message)
+          .set('updatePostData', payload.data)
       } else {
         return state
           .set('updatePostPhase', ERROR)

@@ -5,7 +5,8 @@ import { getPostById, updatePosts } from '../../store/user/duck';
 const UpdatePostContainer = connect(
 	// map state to props
 	state => ({
-		postById: state.user.getPostById
+		postById: state.user.getPostById,
+		success: state.user.updatePostMessage
 	}),
 	// map dispatch to props
 	{

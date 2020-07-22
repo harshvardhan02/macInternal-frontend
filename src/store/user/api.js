@@ -70,9 +70,9 @@ export const getPostById = credentials => {
 export const updatePost = (credentials, body) => {
   return fetch(`${HOSTNAME}/api/v1/update_post/`+credentials, {
     method: 'PUT',
-    // headers: {
-    //   'Content-Type': 'application/json'
-    // },
+    headers: {
+      'Content-Type': 'application/json'
+    },
     body: JSON.stringify(body)
   })
     .then(res => {

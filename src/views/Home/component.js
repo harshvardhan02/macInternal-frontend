@@ -16,7 +16,9 @@ export default class Home extends Component {
             vertical: 'bottom',
             horizontal: 'center',
             shared_id: "",
-            comments: []
+            comments: [],
+            error: '',
+            openError: true
         }
     }
 
@@ -40,6 +42,16 @@ export default class Home extends Component {
     //         posts
     //     })
     // }
+
+    componentDidUpdate(prevProps){
+        console.log(prevProps)
+        if(this.props.error !== prevProps.error){
+            this.setState({
+                error: this.props.error,
+                openError: true
+            })
+        }
+    }
 
     
     handleClose = () => {
@@ -75,6 +87,7 @@ export default class Home extends Component {
     }   
 
     render() {
+        console.log(this.state.error)
         const { vertical, horizontal } = this.state;
         if (this.state.posts.length === 0) {
             return (
@@ -86,16 +99,17 @@ export default class Home extends Component {
                     </div>
                 </div>
             )
-        }
+        }        
+        
         return (
             <div className="container">
                 <Snackbar
                     anchorOrigin={{ vertical, horizontal }}
                     key={`${vertical},${horizontal}`}
-                    open={this.state.opensnack}
+                    open={this.state.openError}
                     onClose={this.handleCloseSnack}
                     message="Post Deleted Successfully"
-                />
+                />                
                 <div className="col-lg-8 offset-lg-2 pb-5">
                     {this.state.posts.map(post => (
                         <React.Fragment key={post._id}>
