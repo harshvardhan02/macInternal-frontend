@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Snackbar from '@material-ui/core/Snackbar'
+// import Snackbar from '@material-ui/core/Snackbar'
 import { Link } from 'react-router-dom';
 import parse from 'html-react-parser';
 
@@ -88,7 +88,7 @@ export default class Home extends Component {
 
     render() {
         console.log(this.state.error)
-        const { vertical, horizontal } = this.state;
+        /*const { vertical, horizontal } = this.state;*/
         if (this.state.posts.length === 0) {
             return (
                 <div className="container">
@@ -103,13 +103,13 @@ export default class Home extends Component {
         
         return (
             <div className="container">
-                <Snackbar
+                {/*<Snackbar
                     anchorOrigin={{ vertical, horizontal }}
                     key={`${vertical},${horizontal}`}
                     open={this.state.openError}
                     onClose={this.handleCloseSnack}
                     message="Post Deleted Successfully"
-                />                
+                />  */}              
                 <div className="col-lg-8 offset-lg-2 pb-5">
                     {this.state.posts.map(post => (
                         <React.Fragment key={post._id}>
