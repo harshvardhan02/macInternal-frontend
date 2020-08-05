@@ -51,6 +51,7 @@ export default class CreatePost extends Component {
         this.setState({
             open: true
         })
+        this.props.history.push('/')
     }
 
 

@@ -9,7 +9,7 @@ export default class Header extends Component {
         };
     }
 
-    logout() {
+    logout = () => {
         this.props.logout()
         this.setState({ visible: false }, () => {
             this.props.history.push('/')
