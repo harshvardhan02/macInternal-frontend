@@ -5,59 +5,60 @@ import * as serviceWorker from './serviceWorker';
 
 import { Provider } from 'react-redux'
 import store from './store'
+import history from './history'
 
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Header from './components/Header';
-// import Home from './components/Home';
-// import CreatePost from './components/CreatePost';
-// import PostUpdate from './components/PostUpdate';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import HtmlEditor from './components/HtmlEditor';
 import Practice from './components/Practice';
 import Footer from './components/Footer';
-import Login from './components/Login';
-import SignUp from './components/SignUp';
 import CreatePostContainer from './views/CreatePost/container';
 import HomeContainer from './views/Home/container';
 import TimeSlotContainer from './views/Timeslot/container';
 import UpdatePostContainer from './views/UpdatePost/container';
+import SignUpContainer from './views/SignUp/container';
+import LoginContainer from './views/Login/container';
 
-// const PrivateRoute = ({ component, user, ...rest }) => {
-//   const isAuthed = (localStorage.getItem('Authorization') || localStorage.getItem('AdminAuthorization')) ? true : false
-//   return (
-//     <Route {...rest} exact
-//       render = {props => (
-//         isAuthed ? 
-//         (
-//           <div>{React.createElement(component, props)}</div>
-//         )
-//         :
-//         (
-//           <Redirect to={{pathname: route, state: { from: props.location } }}/>
-//         )
-//       )}
-//     />
-//   )
-// }
+let route = '/login'
+if (window.location.origin !== 'http://localhost:3000') {
+	route = '/'
+}
+
+const PrivateRoute = ({ component, ...rest }) => {
+	const isAuthed = (localStorage.getItem('authToken')) ? true : false
+	return (
+		<Route {...rest} exact
+			render={props => (
+				isAuthed ?
+					(
+						<div>{React.createElement(component, props)}</div>
+					)
+					:
+					(
+						<Redirect to={{ pathname: route, state: { from: props.location } }} />
+					)
+			)}
+		/>
+	)
+}
 
 class Root extends React.Component {
 	render() {
 		return (
 			<Provider store={store}>
-			<BrowserRouter>
-				<Header />
+				<Router history={history}>
 					<Switch>
-						{/*<PrivateRoute exact path="/" component={Dashboard} {...this.props} />*/}
-						<Route exact path={`${process.env.PUBLIC_URL}/`} component={HomeContainer} />
-						<Route exact path={`${process.env.PUBLIC_URL}/timeslot`} component={TimeSlotContainer} />
-						<Route exact path={`${process.env.PUBLIC_URL}/createpost`} component={CreatePostContainer} />
-						<Route exact path={`${process.env.PUBLIC_URL}/htmleditor`} component={HtmlEditor} />
-						<Route exact path={`${process.env.PUBLIC_URL}/practice`} component={Practice} />
-						<Route exact path={`${process.env.PUBLIC_URL}/login`} component={Login} />
-						<Route exact path={`${process.env.PUBLIC_URL}/signup`} component={SignUp} />
-						<Route exact path={`${process.env.PUBLIC_URL}/updatepost/:id`} component={UpdatePostContainer} />
+						<PrivateRoute exact path={`${process.env.PUBLIC_URL}/`} component={HomeContainer} {...this.props} />
+						<PrivateRoute exact path={`${process.env.PUBLIC_URL}/timeslot`} component={TimeSlotContainer} {...this.props} />
+						<PrivateRoute exact path={`${process.env.PUBLIC_URL}/createpost`} component={CreatePostContainer} {...this.props} />
+						<PrivateRoute exact path={`${process.env.PUBLIC_URL}/htmleditor`} component={HtmlEditor} {...this.props} />
+						<PrivateRoute exact path={`${process.env.PUBLIC_URL}/practice`} component={Practice} {...this.props} />
+						<PrivateRoute exact path={`${process.env.PUBLIC_URL}/updatepost/:id`} component={UpdatePostContainer} {...this.props} />
+						{/* <Route exact path="/" render={() => <Redirect to="/login" />} /> */}
+						<Route exact path={`${process.env.PUBLIC_URL}/signup`} component={SignUpContainer} {...this.props} />
+						<Route exact path={`${process.env.PUBLIC_URL}/login`} component={LoginContainer} {...this.props} />
 					</Switch>
-				<Footer />
-			</BrowserRouter>
+					<Footer />
+				</Router>
 			</Provider>
 		)
 	}

@@ -2,6 +2,25 @@ import { fetch } from '../../utils'
 
 const HOSTNAME = process.env.REACT_APP_API_HOSTNAME
 
+export const loginUser = credentials => {
+  return fetch(`${HOSTNAME}/api/v1/login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(res => {
+      return res.json()
+    })
+    .then(payload => {
+      return payload
+    })
+    .catch(error => {
+      throw error
+    })
+}
+
 // create post api
 
 export const createPost = credentials => {
@@ -47,7 +66,7 @@ export const getPosts = credentials => {
 // getpostbyid 
 
 export const getPostById = credentials => {
-  return fetch(`${HOSTNAME}/api/v1/get_postsById/`+credentials, {
+  return fetch(`${HOSTNAME}/api/v1/get_postsById/` + credentials, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
@@ -68,7 +87,7 @@ export const getPostById = credentials => {
 // update
 
 export const updatePost = (credentials, body) => {
-  return fetch(`${HOSTNAME}/api/v1/update_post/`+credentials, {
+  return fetch(`${HOSTNAME}/api/v1/update_post/` + credentials, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
@@ -89,7 +108,7 @@ export const updatePost = (credentials, body) => {
 // delete
 
 export const deletePost = credentials => {
-  return fetch(`${HOSTNAME}/api/v1/delete_post/`+credentials, {
+  return fetch(`${HOSTNAME}/api/v1/delete_post/` + credentials, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json'

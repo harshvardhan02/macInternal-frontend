@@ -15,6 +15,10 @@ import * as api from './api'
  **********************************/
 // const cookies = new Cookies()
 
+export const LOGIN_USER = 'machineTest/user/LOGIN_USER'
+export const LOGIN_USER_SUCCESS = 'machineTest/user/LOGIN_USER_SUCCESS'
+export const LOGIN_USER_ERROR = 'machineTest/user/LOGIN_USER_ERROR'
+
 export const CREATE_POST = 'machineTest/user/CREATE_POST'
 export const CREATE_POST_SUCCESS = 'machineTest/user/CREATE_POST_SUCCESS'
 export const CREATE_POST_ERROR = 'machineTest/user/CREATE_POST_ERROR'
@@ -23,39 +27,46 @@ export const GET_POST = 'machineTest/user/GET_POST'
 export const GET_POST_SUCCESS = 'machineTest/user/GET_POST_SUCCESS'
 export const GET_POST_ERROR = 'machineTest/user/GET_POST_ERROR'
 
-export const UPDATE_POST = 'machineTest/user/UPDATE_POST' 
-export const UPDATE_POST_SUCCESS = 'machineTest/user/UPDATE_POST_SUCCESS' 
+export const UPDATE_POST = 'machineTest/user/UPDATE_POST'
+export const UPDATE_POST_SUCCESS = 'machineTest/user/UPDATE_POST_SUCCESS'
 export const UPDATE_POST_ERROR = 'machineTest/user/UPDATE_POST_ERROR'
 
-export const GET_POST_BY_ID = 'machineTest/user/GET_POST_BY_ID' 
-export const GET_POST_BY_ID_SUCCESS = 'machineTest/user/GET_POST_BY_ID_SUCCESS' 
+export const GET_POST_BY_ID = 'machineTest/user/GET_POST_BY_ID'
+export const GET_POST_BY_ID_SUCCESS = 'machineTest/user/GET_POST_BY_ID_SUCCESS'
 export const GET_POST_BY_ID_ERROR = 'machineTest/user/GET_POST_BY_ID_ERROR'
 
 export const DELETE_POST = 'machineTest/user/DELETE_POST'
 export const DELETE_POST_SUCCESS = 'machineTest/user/DELETE_POST_SUCCESS'
 export const DELETE_POST_ERROR = 'machineTest/user/DELETE_POST_ERROR'
 
+export const CLEAR_PHASE = 'machineTest/user/CLEAR_PHASE'
+
+export const USER_LOGOUT = 'machineTest/user/USER_LOGOUT'
+
 
 /***********************************
  * Initial State
  ***********/
 
- const InitialStateInterface = {
- 	phase: INIT,
- 	error: null,
- 	isSubmitting: false,
- 	message: null,
+const InitialStateInterface = {
+  phase: INIT,
+  error: null,
+  isSubmitting: false,
+  message: null,
+  token: null,
   createPostMessage: '',
   postPhase: INIT,
   posts: [],
-  timeSlots: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
   updatePostPhase: INIT,
   updatePostData: [],
   updatePostMessage: '',
   getPostById: [],
   deleteMessage: '',
-  deletePostPhase: INIT 
- }
+  deletePostPhase: INIT,
+  loginPhase: INIT,
+  isSuccess: false,
+  loginError: {}
+}
 
 class InitialState extends Record(InitialStateInterface) {
   constructor(desiredValues) {
@@ -70,8 +81,31 @@ class InitialState extends Record(InitialStateInterface) {
  * Reducer
  ***********/
 
- export default function (state = new InitialState(), action = {}) {
- 	switch (action.type) {
+export default function (state = new InitialState(), action = {}) {
+  switch (action.type) {
+
+    case LOGIN_USER: {
+      return state
+        .set('phase', LOADING)
+        .set('loginError', null)
+    }
+
+    case LOGIN_USER_SUCCESS: {
+      const { payload } = action
+      localStorage.setItem('authToken', payload.token)
+      return state
+        .set('loginPhase', SUCCESS)
+        .set('isSuccess', payload.status)
+        .set('message', payload.message)
+        .set('loginError', null)
+    }
+
+    case LOGIN_USER_ERROR: {
+      const { payload } = action
+      return state
+        .set('loginPhase', ERROR)
+        .set('loginError', payload.message)
+    }
 
     case CREATE_POST: {
       return state
@@ -81,16 +115,16 @@ class InitialState extends Record(InitialStateInterface) {
     }
 
     case CREATE_POST_SUCCESS: {
-        const { payload } = action
-        if(payload.status){
-          return state
-            .set('phase', SUCCESS)
-            .set('createPostMessage', payload.message)
-        }else{
-          return state
+      const { payload } = action
+      if (payload.status) {
+        return state
+          .set('phase', SUCCESS)
+          .set('createPostMessage', payload.message)
+      } else {
+        return state
           .set('phase', ERROR)
           .set('message', payload.message)
-        }
+      }
     }
 
     case CREATE_POST_ERROR: {
@@ -110,7 +144,7 @@ class InitialState extends Record(InitialStateInterface) {
 
     case GET_POST_SUCCESS: {
       const { payload } = action
-      if(payload.status){
+      if (payload.status) {
         return state
           .set('postPhase', SUCCESS)
           .set('posts', payload.data)
@@ -120,10 +154,9 @@ class InitialState extends Record(InitialStateInterface) {
     }
 
     case GET_POST_ERROR: {
-      const { payload } = action
       return state
         .set('postPhase', ERROR)
-        .set('error', 'Something went wrong') 
+        .set('error', 'Something went wrong')
     }
 
     case UPDATE_POST: {
@@ -135,7 +168,7 @@ class InitialState extends Record(InitialStateInterface) {
 
     case UPDATE_POST_SUCCESS: {
       const { payload } = action
-      if(payload.status){
+      if (payload.status) {
         return state
           .set('updatePostPhase', SUCCESS)
           .set('updatePostMessage', payload.message)
@@ -143,7 +176,7 @@ class InitialState extends Record(InitialStateInterface) {
       } else {
         return state
           .set('updatePostPhase', ERROR)
-          .set('updatePostMessage', payload.message) 
+          .set('updatePostMessage', payload.message)
       }
     }
 
@@ -164,7 +197,7 @@ class InitialState extends Record(InitialStateInterface) {
 
     case GET_POST_BY_ID_SUCCESS: {
       const { payload } = action
-      if(payload.status){
+      if (payload.status) {
         return state
           .set('postPhase', SUCCESS)
           .set('getPostById', payload.data)
@@ -177,7 +210,7 @@ class InitialState extends Record(InitialStateInterface) {
       const { payload } = action
       return state
         .set('postPhase', ERROR)
-        .set('error', payload.message) 
+        .set('error', payload.message)
     }
 
     case DELETE_POST: {
@@ -189,7 +222,7 @@ class InitialState extends Record(InitialStateInterface) {
 
     case DELETE_POST_SUCCESS: {
       const { payload } = action
-      if(payload.status){
+      if (payload.status) {
         return state
           .set('deletePostPhase', SUCCESS)
           .set('deleteMessage', payload.message)
@@ -201,18 +234,30 @@ class InitialState extends Record(InitialStateInterface) {
       const { payload } = action
       return state
         .set('deletePostPhase', ERROR)
-        .set('error', payload.message) 
+        .set('error', payload.message)
     }
 
- 		default: {
-      		return state
-    	}
- 	}
- }
+    case USER_LOGOUT: {
+      window.localStorage.clear()
+      return state
+        .set('loginPhase', INIT)
+    }
 
- /***********************************
- * Action Creators
- ***********/ 
+    default: {
+      return state
+    }
+  }
+}
+
+/***********************************
+* Action Creators
+***********/
+export const loginUser = credentials => {
+  return {
+    type: LOGIN_USER,
+    payload: credentials
+  }
+}
 
 export const createPost = credentials => {
   return {
@@ -250,112 +295,140 @@ export const deletePost = credentials => {
   }
 }
 
+export const logout = data => {
+  console.log(data)
+  return {
+    type: USER_LOGOUT,
+    payload: data
+  }
+}
+
 /***********************************
  * Epics
  ***********************************/
-
-const createPostEpic = action$ => 
+const loginUserEpic = action$ =>
   action$.pipe(
-  ofType(CREATE_POST),
-  mergeMap(action => {
-    return fromPromise(api.createPost(action.payload)).pipe(
-      flatMap(payload => [{
-        type: CREATE_POST_SUCCESS,
-        payload
-      }
-    ]),
-    catchError(error =>
-        of({
-          type: CREATE_POST_ERROR,
-          payload: { error }
-        })
+    ofType(LOGIN_USER),
+    mergeMap(action => {
+      return fromPromise(api.loginUser(action.payload)).pipe(
+        flatMap(payload => [{
+          type: LOGIN_USER_SUCCESS,
+          payload
+        }
+        ]),
+        catchError(error =>
+          of({
+            type: LOGIN_USER_ERROR,
+            payload: { error }
+          })
+        )
       )
-    )
-  })
-)
+    })
+  )
 
-const getPostEpic = action$ => 
+const createPostEpic = action$ =>
   action$.pipe(
-  ofType(GET_POST),
-  mergeMap(action => {
-    return fromPromise(api.getPosts(action.payload)).pipe(
-      flatMap(payload => [{
-        type: GET_POST_SUCCESS,
-        payload
-      }
-    ]),
-    catchError(error =>
-        of({
-          type: GET_POST_ERROR,
-          payload: { error }
-        })
+    ofType(CREATE_POST),
+    mergeMap(action => {
+      return fromPromise(api.createPost(action.payload)).pipe(
+        flatMap(payload => [{
+          type: CREATE_POST_SUCCESS,
+          payload
+        }
+        ]),
+        catchError(error =>
+          of({
+            type: CREATE_POST_ERROR,
+            payload: { error }
+          })
+        )
       )
-    )
-  })
-)
+    })
+  )
 
-const getPostByIdEpic = action$ => 
+const getPostEpic = action$ =>
   action$.pipe(
-  ofType(GET_POST_BY_ID),
-  mergeMap(action => {
-    return fromPromise(api.getPostById(action.payload)).pipe(
-      flatMap(payload => [{
-        type: GET_POST_BY_ID_SUCCESS,
-        payload
-      }
-    ]),
-    catchError(error =>
-        of({
-          type: GET_POST_BY_ID_ERROR,
-          payload: { error }
-        })
+    ofType(GET_POST),
+    mergeMap(action => {
+      return fromPromise(api.getPosts(action.payload)).pipe(
+        flatMap(payload => [{
+          type: GET_POST_SUCCESS,
+          payload
+        }
+        ]),
+        catchError(error =>
+          of({
+            type: GET_POST_ERROR,
+            payload: { error }
+          })
+        )
       )
-    )
-  })
-)
+    })
+  )
 
-const updatePostEpic = action$ => 
+const getPostByIdEpic = action$ =>
   action$.pipe(
-  ofType(UPDATE_POST),
-  mergeMap(action => {
-    return fromPromise(api.updatePost(action.payload, action.body)).pipe(
-      flatMap(payload => [{
-        type: UPDATE_POST_SUCCESS,
-        payload
-      }
-    ]),
-    catchError(error =>
-        of({
-          type: UPDATE_POST_ERROR,
-          payload: { error }
-        })
+    ofType(GET_POST_BY_ID),
+    mergeMap(action => {
+      return fromPromise(api.getPostById(action.payload)).pipe(
+        flatMap(payload => [{
+          type: GET_POST_BY_ID_SUCCESS,
+          payload
+        }
+        ]),
+        catchError(error =>
+          of({
+            type: GET_POST_BY_ID_ERROR,
+            payload: { error }
+          })
+        )
       )
-    )
-  })
-)
+    })
+  )
+
+const updatePostEpic = action$ =>
+  action$.pipe(
+    ofType(UPDATE_POST),
+    mergeMap(action => {
+      return fromPromise(api.updatePost(action.payload, action.body)).pipe(
+        flatMap(payload => [{
+          type: UPDATE_POST_SUCCESS,
+          payload
+        }
+        ]),
+        catchError(error =>
+          of({
+            type: UPDATE_POST_ERROR,
+            payload: { error }
+          })
+        )
+      )
+    })
+  )
 
 const deletePostEpic = action$ =>
   action$.pipe(
-  ofType(DELETE_POST),
-  mergeMap(action => {
-    return fromPromise(api.deletePost(action.payload)).pipe(
-      flatMap(payload => [{
-        type: DELETE_POST_SUCCESS,
-        payload
-      }
-    ]),
-    catchError(error =>
-        of({
-          type: DELETE_POST_ERROR,
-          payload: { error }
-        })
+    ofType(DELETE_POST),
+    mergeMap(action => {
+      return fromPromise(api.deletePost(action.payload)).pipe(
+        flatMap(payload => [{
+          type: DELETE_POST_SUCCESS,
+          payload
+        }
+        ]),
+        catchError(error =>
+          of({
+            type: DELETE_POST_ERROR,
+            payload: { error }
+          })
+        )
       )
-    )
-  })
-)
-  
+    })
+  )
+
 
 export const userEpic = combineEpics(
+  loginUserEpic,
   createPostEpic,
   getPostEpic,
   updatePostEpic,

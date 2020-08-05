@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import ReactTimeslotCalendar from 'react-timeslot-calendar';
 
 export default class TimeSlot extends Component {
 	constructor(props){
@@ -59,7 +58,7 @@ export default class TimeSlot extends Component {
   		var currentDate = moment();
 
   		var weekStart = currentDate.clone().startOf('isoWeek');
-  		var weekEnd = currentDate.clone().endOf('isoWeek');
+  		// var weekEnd = currentDate.clone().endOf('isoWeek');
 
   		var days = [];
 

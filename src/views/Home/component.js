@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 // import Snackbar from '@material-ui/core/Snackbar'
 import { Link } from 'react-router-dom';
 import parse from 'html-react-parser';
+import Header from '../Header/container';
 
 export default class Home extends Component {
     constructor(props) {
@@ -24,13 +25,13 @@ export default class Home extends Component {
 
     //new method
     static getDerivedStateFromProps = (state, props) => {
-        if(props.posts !== state.posts){
+        if (props.posts !== state.posts) {
             return {
                 posts: state.posts
             }
         }
         return null
-    }    
+    }
 
     //old method
 
@@ -43,9 +44,8 @@ export default class Home extends Component {
     //     })
     // }
 
-    componentDidUpdate(prevProps){
-        console.log(prevProps)
-        if(this.props.error !== prevProps.error){
+    componentDidUpdate(prevProps) {
+        if (this.props.error !== prevProps.error) {
             this.setState({
                 error: this.props.error,
                 openError: true
@@ -53,7 +53,7 @@ export default class Home extends Component {
         }
     }
 
-    
+
     handleClose = () => {
         this.setState({
             open: false
@@ -84,10 +84,9 @@ export default class Home extends Component {
         console.log(id)
         this.props.deletePost(id)
         this.props.getPosts()
-    }   
+    }
 
     render() {
-        console.log(this.state.error)
         /*const { vertical, horizontal } = this.state;*/
         if (this.state.posts.length === 0) {
             return (
@@ -99,45 +98,48 @@ export default class Home extends Component {
                     </div>
                 </div>
             )
-        }        
-        
+        }
+
         return (
-            <div className="container">
-                {/*<Snackbar
+            <div>
+                <Header {...this.props} />
+                <div className="container">
+                    {/*<Snackbar
                     anchorOrigin={{ vertical, horizontal }}
                     key={`${vertical},${horizontal}`}
                     open={this.state.openError}
                     onClose={this.handleCloseSnack}
                     message="Post Deleted Successfully"
-                />  */}              
-                <div className="col-lg-8 offset-lg-2 pb-5">
-                    {this.state.posts.map(post => (
-                        <React.Fragment key={post._id}>
-                            <div className="card mt-4">
-                                <div className="card-body">
-                                    <div className="d-flex justify-content-between align-items-center">
-                                        <h4 className="card-title w-75">{post.title}</h4>
-                                        <div className="w-25 text-right">
-                                            <span onClick={() => this.deletePost(post._id)} className="badge badge-danger cp">Delete</span>
-                                            <span className="badge badge-primary cp ml-3">
-                                                <Link className="text-white" to={`/updatepost/${post._id}`}>Update</Link>
-                                            </span>
+                />  */}
+                    <div className="col-lg-8 offset-lg-2 pb-5">
+                        {this.state.posts.map(post => (
+                            <React.Fragment key={post._id}>
+                                <div className="card mt-4">
+                                    <div className="card-body">
+                                        <div className="d-flex justify-content-between align-items-center">
+                                            <h4 className="card-title w-75">{post.title}</h4>
+                                            <div className="w-25 text-right">
+                                                <span onClick={() => this.deletePost(post._id)} className="badge badge-danger cp">Delete</span>
+                                                <span className="badge badge-primary cp ml-3">
+                                                    <Link className="text-white" to={`/updatepost/${post._id}`}>Update</Link>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div className="card-text">
+                                            {parse(post.body)}
                                         </div>
                                     </div>
-                                    <div className="card-text">
-                                        {parse(post.body)}
+                                    <div className="card-footer">
+                                        <div className="d-flex justify-content-end">
+                                            <span onClick={() => this.commentInputHandler(post._id)} className="badge badge-pill badge-secondary mr-3 cp">Comment</span>
+                                            <span onClick={() => this.handleClickOpen(post._id)} className="badge badge-pill badge-info cp">View comment</span>
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="card-footer">
-                                    <div className="d-flex justify-content-end">
-                                        <span onClick={() => this.commentInputHandler(post._id)} className="badge badge-pill badge-secondary mr-3 cp">Comment</span>
-                                        <span onClick={() => this.handleClickOpen(post._id)} className="badge badge-pill badge-info cp">View comment</span>
-                                    </div>                                    
-                                </div>
-                            </div>
-                        </React.Fragment>
-                    ))}
-                </div>                
+                            </React.Fragment>
+                        ))}
+                    </div>
+                </div>
             </div>
         )
     }
