@@ -13,8 +13,7 @@ export default class Login extends Component {
         this.onSubmit = this.onSubmit.bind(this)
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        console.log(prevProps, 'props')
+    componentDidUpdate(prevProps) {
         console.log(this.props.loginPhase)
         if (prevProps.loginPhase !== this.props.loginPhase) {
             this.props.history.push('/')
@@ -22,7 +21,6 @@ export default class Login extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props.loginPhase)
         const user = localStorage.getItem('authToken')
         if (user && user !== 'undefined') {
             this.props.history.push('/')

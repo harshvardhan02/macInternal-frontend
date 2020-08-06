@@ -19,6 +19,10 @@ export const LOGIN_USER = 'machineTest/user/LOGIN_USER'
 export const LOGIN_USER_SUCCESS = 'machineTest/user/LOGIN_USER_SUCCESS'
 export const LOGIN_USER_ERROR = 'machineTest/user/LOGIN_USER_ERROR'
 
+export const SIGNUP_USER = 'machineTest/user/SIGNUP_USER'
+export const SIGNUP_USER_SUCCESS = 'machineTest/user/SIGNUP_USER_SUCCESS'
+export const SIGNUP_USER_ERROR = 'machineTest/user/SIGNUP_USER_ERROR'
+
 export const CREATE_POST = 'machineTest/user/CREATE_POST'
 export const CREATE_POST_SUCCESS = 'machineTest/user/CREATE_POST_SUCCESS'
 export const CREATE_POST_ERROR = 'machineTest/user/CREATE_POST_ERROR'
@@ -65,7 +69,9 @@ const InitialStateInterface = {
   deletePostPhase: INIT,
   loginPhase: INIT,
   isSuccess: false,
-  loginError: {}
+  loginError: {},
+  signUpPhase: INIT,
+  signUpError: {}
 }
 
 class InitialState extends Record(InitialStateInterface) {
@@ -105,6 +111,29 @@ export default function (state = new InitialState(), action = {}) {
       return state
         .set('loginPhase', ERROR)
         .set('loginError', payload.message)
+    }
+
+    case SIGNUP_USER: {
+      return state
+        .set('phase', LOADING)
+        .set('signUpError', null)
+    }
+
+    case SIGNUP_USER_SUCCESS: {
+      const { payload } = action
+      localStorage.setItem('authToken', payload.token)
+      return state
+        .set('signUpPhase', SUCCESS)
+        .set('isSuccess', payload.status)
+        .set('message', payload.message)
+        .set('signUpError', null)
+    }
+
+    case SIGNUP_USER_ERROR: {
+      const { payload } = action
+      return state
+        .set('signUpPhase', ERROR)
+        .set('signUpError', payload.message)
     }
 
     case CREATE_POST: {
@@ -241,6 +270,7 @@ export default function (state = new InitialState(), action = {}) {
       window.localStorage.clear()
       return state
         .set('loginPhase', INIT)
+        .set('signUpPhase', INIT)
     }
 
     default: {
@@ -255,6 +285,13 @@ export default function (state = new InitialState(), action = {}) {
 export const loginUser = credentials => {
   return {
     type: LOGIN_USER,
+    payload: credentials
+  }
+}
+
+export const signupUser = credentials => {
+  return {
+    type: SIGNUP_USER,
     payload: credentials
   }
 }
@@ -296,7 +333,6 @@ export const deletePost = credentials => {
 }
 
 export const logout = data => {
-  console.log(data)
   return {
     type: USER_LOGOUT,
     payload: data
@@ -319,6 +355,26 @@ const loginUserEpic = action$ =>
         catchError(error =>
           of({
             type: LOGIN_USER_ERROR,
+            payload: { error }
+          })
+        )
+      )
+    })
+  )
+
+const signupUserEpic = action$ =>
+  action$.pipe(
+    ofType(SIGNUP_USER),
+    mergeMap(action => {
+      return fromPromise(api.signupUser(action.payload)).pipe(
+        flatMap(payload => [{
+          type: SIGNUP_USER_SUCCESS,
+          payload
+        }
+        ]),
+        catchError(error =>
+          of({
+            type: SIGNUP_USER_ERROR,
             payload: { error }
           })
         )
@@ -429,6 +485,7 @@ const deletePostEpic = action$ =>
 
 export const userEpic = combineEpics(
   loginUserEpic,
+  signupUserEpic,
   createPostEpic,
   getPostEpic,
   updatePostEpic,

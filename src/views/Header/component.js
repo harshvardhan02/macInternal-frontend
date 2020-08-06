@@ -7,10 +7,11 @@ export default class Header extends Component {
         this.state = {
             visible: false
         };
+        this.logout = this.logout.bind(this)
     }
 
     logout = () => {
-        this.props.logout()
+        this.props.logout();
         this.setState({ visible: false }, () => {
             this.props.history.push('/')
         })
@@ -35,7 +36,7 @@ export default class Header extends Component {
                                     <NavLink className="btn btn-info ml-4" activeClassName="text-warning" to="/createpost">Create post</NavLink>
                                 </li>
                                 <li className="nav-item">
-                                    <NavLink onClick={this.logout.bind(this)} exact={true} className="nav-link ml-4" activeClassName="text-info" to="">Logout</NavLink>
+                                    <NavLink onClick={this.logout} exact={true} className="nav-link ml-4" activeClassName="text-info" to="">Logout</NavLink>
                                 </li>
                             </ul>
                         </div>

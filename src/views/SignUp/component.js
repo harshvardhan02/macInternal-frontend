@@ -6,11 +6,11 @@ export default class SignUp extends Component {
         super(props);
 
         this.state = {
+            name: '',
             email: '',
             password: '',
             gender: '',
             state: '',
-            checked: '',
             states: [{ "code": "AN", "name": "Andaman and Nicobar Islands" },
             { "code": "AP", "name": "Andhra Pradesh" },
             { "code": "AR", "name": "Arunachal Pradesh" },
@@ -59,12 +59,50 @@ export default class SignUp extends Component {
         })
     }
 
+    // static getDerivedStateFromProps(props, state) {
+    //     console.log(props)
+    //     console.log(state)
+    //     if (props.signUpPhase === 'success') {
+    //         props.history.push('/login')
+    //     }
+    //     return null
+    // }
+
+    componentDidMount() {
+        const user = localStorage.getItem('authToken')
+        if (user && user !== 'undefined') {
+            this.props.history.push('/')
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        console.log(prevProps, 'prevProps')
+        console.log(this.props.signUpPhase, 'this-props')
+
+        const { signUpPhase } = prevProps
+        // if (signUpPhase === 'success') {
+        //     this.props.history.push('/')
+        // }
+        if (signUpPhase !== this.props.signUpPhase) {
+            this.props.history.push('/')
+        }
+    }
+
+    // componentWillReceiveProps(recieveProps) {
+    //     // this old method is working
+    //     const { signUpPhase } = recieveProps
+    //     if (signUpPhase === 'success') {
+    //         this.props.history.push('/login')
+    //     }
+    // }
+
     onSubmit = e => {
         e.preventDefault()
-        const { email, password, gender, state, checked } = this.state;
-        const data = { email, password, gender, state, checked }
-        console.log(data)
+        const { name, email, password, gender, state } = this.state;
+        const data = { name, email, password, gender, state }
+        this.props.signupUser(data)
     }
+
     render() {
         return (
             <div className="container d-flex min-vh-100">
@@ -72,6 +110,10 @@ export default class SignUp extends Component {
                     <div className="col-lg-8">
                         <h4 className="text-center">Sign Up</h4>
                         <form>
+                            <div className="form-group">
+                                <label htmlFor="exampleInputEmail1">Name</label>
+                                <input name="name" onChange={this.inputHandler} type="email" className="form-control" placeholder="Enter name" />
+                            </div>
                             <div className="form-group">
                                 <label htmlFor="exampleInputEmail1">Email address</label>
                                 <input name="email" onChange={this.inputHandler} type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" />
@@ -97,11 +139,9 @@ export default class SignUp extends Component {
                                 <input name="gender" onChange={this.inputHandler} className="form-check-input" type="radio" id="inlineRadio2" value="Female" />
                                 <label className="form-check-label" htmlFor="inlineRadio2">Female</label>
                             </div>
-                            <div className="form-group form-check mt-4">
-                                <input name="checked" onChange={this.inputHandler} type="checkbox" className="form-check-input" id="exampleCheck1" />
-                                <label className="form-check-label" htmlFor="exampleCheck1">Check me out</label>
+                            <div className="d-flex mt-3">
+                                <button onClick={this.onSubmit} type="submit" className="btn btn-primary">Submit</button>
                             </div>
-                            <button onClick={this.onSubmit} type="submit" className="btn btn-primary">Submit</button>
                             <small id="emailHelp" className="form-text text-muted">Already have an account <Link to="/login">Login here</Link></small>
                         </form>
                     </div>

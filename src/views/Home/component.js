@@ -53,7 +53,6 @@ export default class Home extends Component {
         }
     }
 
-
     handleClose = () => {
         this.setState({
             open: false
@@ -81,7 +80,6 @@ export default class Home extends Component {
     }
 
     deletePost = id => {
-        console.log(id)
         this.props.deletePost(id)
         this.props.getPosts()
     }
@@ -92,9 +90,9 @@ export default class Home extends Component {
             return (
                 <div className="container">
                     <div className="col-lg-6 offset-lg-3">
-                        <div className="card mt-5">
+                        {/* <div className="card mt-5">
                             <div className="card-header text-center">No data found</div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             )
@@ -117,7 +115,7 @@ export default class Home extends Component {
                                 <div className="card mt-4">
                                     <div className="card-body">
                                         <div className="d-flex justify-content-between align-items-center">
-                                            <h4 className="card-title w-75">{post.title}</h4>
+                                            <strong className="card-title w-75">{post.title}</strong>
                                             <div className="w-25 text-right">
                                                 <span onClick={() => this.deletePost(post._id)} className="badge badge-danger cp">Delete</span>
                                                 <span className="badge badge-primary cp ml-3">

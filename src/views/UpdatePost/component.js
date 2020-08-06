@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import Snackbar from '@material-ui/core/Snackbar';
-import Header from '../Header/component';
+import Header from '../Header/container';
 
 export default class updatePost extends Component {
     constructor(props) {

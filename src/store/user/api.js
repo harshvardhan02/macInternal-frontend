@@ -2,6 +2,29 @@ import { fetch } from '../../utils'
 
 const HOSTNAME = process.env.REACT_APP_API_HOSTNAME
 
+// signup user
+
+export const signupUser = credentials => {
+  return fetch(`${HOSTNAME}/api/v1/users`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(res => {
+      return res.json()
+    })
+    .then(payload => {
+      return payload
+    })
+    .catch(error => {
+      throw error
+    })
+}
+
+// login user
+
 export const loginUser = credentials => {
   return fetch(`${HOSTNAME}/api/v1/login`, {
     method: 'POST',

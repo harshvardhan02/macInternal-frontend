@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import Snackbar from '@material-ui/core/Snackbar';
-import Header from '../Header/component';
+import Header from '../Header/container';
 
 export default class CreatePost extends Component {
     constructor(props) {
@@ -70,10 +70,6 @@ export default class CreatePost extends Component {
                     />
                     <div className="col-lg-8 offset-lg-2">
                         <h4 className="text-center mt-4">Create Post</h4>
-                        {/* <div className="alert alert-success mt-3" role="alert">
-                        <strong>Sucess!</strong> You successfully created this
-                        post.
-                    </div> */}
                         <form onSubmit={this.handleSubmit} className="py-2">
                             <div className="form-group">
                                 <label htmlFor="title">Post Title</label>
@@ -88,15 +84,6 @@ export default class CreatePost extends Component {
                             </div>
                             <div className="form-group">
                                 <label htmlFor="body">Post Description</label>
-                                {/*<textarea
-                                rows="6"
-                                value={post.body}
-                                onChange={this.handleChange}
-                                type="text"
-                                id="body"
-                                name="body"
-                                className="form-control"
-                            />*/}
                                 <Editor
                                     apiKey='9ztainkpdpehxdxkpztgt25fo6vlonfmjg1l4jduqdnfrfhv'
                                     initialValue={this.state.body}
