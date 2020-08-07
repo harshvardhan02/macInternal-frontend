@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import parse from 'html-react-parser';
 import Header from '../Header/container';
+import Pagination from '../../components/Pagination';
+import { indexOf } from 'lodash';
 
 export default class Home extends Component {
     constructor(props) {
@@ -19,7 +21,9 @@ export default class Home extends Component {
             shared_id: "",
             comments: [],
             error: '',
-            openError: true
+            openError: true,
+            pageSize: 2,
+            currentPage: 1
         }
     }
 
@@ -31,6 +35,18 @@ export default class Home extends Component {
             }
         }
         return null
+    }
+    
+    nextPage = () => {
+        this.setState({
+            currentPage: this.state.currentPage + 1
+        })
+    }
+
+    prevPage = () => {
+        this.setState({
+            currentPage: this.state.currentPage - 1
+        })
     }
 
     //old method
@@ -67,6 +83,7 @@ export default class Home extends Component {
     }
 
     componentDidMount() {
+        const { currentPage, pageSize } = this.state
         this.props.getPosts()
 
         const { posts, show } = this.state
@@ -84,33 +101,31 @@ export default class Home extends Component {
         this.props.getPosts()
     }
 
+    handlePageChange = page => {
+        console.log(page)
+        this.setState({ currentPage: page });
+    }
+
     render() {
-        /*const { vertical, horizontal } = this.state;*/
-        if (this.state.posts.length === 0) {
-            return (
-                <div className="container">
-                    <div className="col-lg-6 offset-lg-3">
-                        {/* <div className="card mt-5">
-                            <div className="card-header text-center">No data found</div>
-                        </div> */}
-                    </div>
-                </div>
-            )
-        }
+        const { currentPage, pageSize, posts } = this.state;
+        const indexOfLastPost = currentPage * pageSize;
+        const indexOfFirstPost = indexOfLastPost - pageSize;
+        const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost)
 
         return (
             <div>
                 <Header {...this.props} />
                 <div className="container">
-                    {/*<Snackbar
-                    anchorOrigin={{ vertical, horizontal }}
-                    key={`${vertical},${horizontal}`}
-                    open={this.state.openError}
-                    onClose={this.handleCloseSnack}
-                    message="Post Deleted Successfully"
-                />  */}
+                    {
+                        this.state.posts.length === 0 ?
+                            <div className="card mt-5">
+                                <div className="card-header text-center">No data found</div>
+                            </div>
+                            :
+                            null
+                    }
                     <div className="col-lg-8 offset-lg-2 pb-5">
-                        {this.state.posts.map(post => (
+                        {currentPosts.map(post => (
                             <React.Fragment key={post._id}>
                                 <div className="card mt-4">
                                     <div className="card-body">
@@ -129,13 +144,22 @@ export default class Home extends Component {
                                     </div>
                                     <div className="card-footer">
                                         <div className="d-flex justify-content-end">
-                                            <span onClick={() => this.commentInputHandler(post._id)} className="badge badge-pill badge-secondary mr-3 cp">Comment</span>
-                                            <span onClick={() => this.handleClickOpen(post._id)} className="badge badge-pill badge-info cp">View comment</span>
+                                            <span className="badge badge-pill badge-secondary mr-3 cp">Comment</span>
+                                            <span className="badge badge-pill badge-info cp">View comment</span>
                                         </div>
                                     </div>
                                 </div>
                             </React.Fragment>
                         ))}
+
+                        <Pagination 
+                            itemsCount={posts.length} 
+                            pageSize={pageSize} 
+                            currentPage={currentPage}
+                            onPageChange={this.handlePageChange}
+                            nextPage={this.nextPage}
+                            prevPage={this.prevPage}
+                        />
                     </div>
                 </div>
             </div>

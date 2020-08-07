@@ -303,10 +303,11 @@ export const createPost = credentials => {
   }
 }
 
-export const getPosts = credentials => {
+export const getPosts = (offset, limit) => {
   return {
     type: GET_POST,
-    payload: credentials
+    offset: offset,
+    limit: limit
   }
 }
 
@@ -406,7 +407,7 @@ const getPostEpic = action$ =>
   action$.pipe(
     ofType(GET_POST),
     mergeMap(action => {
-      return fromPromise(api.getPosts(action.payload)).pipe(
+      return fromPromise(api.getPosts(action.offset, action.limit)).pipe(
         flatMap(payload => [{
           type: GET_POST_SUCCESS,
           payload

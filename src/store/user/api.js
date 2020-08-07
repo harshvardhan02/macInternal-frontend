@@ -67,8 +67,8 @@ export const createPost = credentials => {
 
 // read
 
-export const getPosts = credentials => {
-  return fetch(`${HOSTNAME}/api/v1/get_posts`, {
+export const getPosts = (offset, limit) => {
+  return fetch(`${HOSTNAME}/api/v1/get_posts?page=${offset}&limit=${limit}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
