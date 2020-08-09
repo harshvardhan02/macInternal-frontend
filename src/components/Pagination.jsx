@@ -7,8 +7,6 @@ const Pagination = (props) => {
     const pagesCount = Math.ceil(itemsCount / pageSize);
 
     const pages = _.range(1, pagesCount + 1);
-    console.log(pagesCount, 'llall')
-    console.log(currentPage, 'current')
 
     return (
         <nav className="mt-3">
