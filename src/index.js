@@ -8,7 +8,6 @@ import store from './store'
 import history from './history'
 
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
-import HtmlEditor from './components/HtmlEditor';
 import Practice from './components/Practice';
 import Footer from './components/Footer';
 import CreatePostContainer from './views/CreatePost/container';
@@ -50,7 +49,6 @@ class Root extends React.Component {
 						<PrivateRoute exact path={`${process.env.PUBLIC_URL}/`} component={HomeContainer} {...this.props} />
 						<PrivateRoute exact path={`${process.env.PUBLIC_URL}/timeslot`} component={TimeSlotContainer} {...this.props} />
 						<PrivateRoute exact path={`${process.env.PUBLIC_URL}/createpost`} component={CreatePostContainer} {...this.props} />
-						<PrivateRoute exact path={`${process.env.PUBLIC_URL}/htmleditor`} component={HtmlEditor} {...this.props} />
 						<PrivateRoute exact path={`${process.env.PUBLIC_URL}/practice`} component={Practice} {...this.props} />
 						<PrivateRoute exact path={`${process.env.PUBLIC_URL}/updatepost/:id`} component={UpdatePostContainer} {...this.props} />
 						{/* <Route exact path="/" render={() => <Redirect to="/login" />} /> */}
