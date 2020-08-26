@@ -83,7 +83,6 @@ export default class Home extends Component {
     }
 
     componentDidMount() {
-        const { currentPage, pageSize } = this.state
         this.props.getPosts()
 
         const { posts, show } = this.state

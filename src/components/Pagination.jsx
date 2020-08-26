@@ -9,7 +9,7 @@ const Pagination = (props) => {
     const pages = _.range(1, pagesCount + 1);
 
     return (
-        <div class="fixed-bottom mb-5 d-flex justify-content-center">
+        <div className="fixed-bottom mb-5 d-flex justify-content-center">
             <nav className="mt-3">
                 <ul className="pagination">
                     <li className={currentPage === 1 ? "page-item disabled" : "page-item"}>

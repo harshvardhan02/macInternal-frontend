@@ -7,7 +7,7 @@ import { Provider } from 'react-redux'
 import store from './store'
 import history from './history'
 
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import Practice from './components/Practice';
 import Footer from './components/Footer';
 import CreatePostContainer from './views/CreatePost/container';

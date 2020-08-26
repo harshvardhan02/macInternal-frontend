@@ -71,7 +71,7 @@ const InitialStateInterface = {
   deletePostPhase: INIT,
   loginPhase: INIT,
   isSuccess: false,
-  loginError: {},
+  loginError: '',
   signUpPhase: INIT,
   signUpError: {},
   userDetails: {},
@@ -114,7 +114,7 @@ export default function (state = new InitialState(), action = {}) {
       const { payload } = action
       return state
         .set('loginPhase', ERROR)
-        .set('loginError', payload.message)
+        .set('loginError', payload.error.message)
     }
 
     case SIGNUP_USER: {

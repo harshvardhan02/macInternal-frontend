@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 
 const AdminLogin = (props) => {
     const { handleSubmit, register, errors } = useForm();
-
     const onSubmit = values => {
         props.loginUser(values)
     };
@@ -14,13 +13,18 @@ const AdminLogin = (props) => {
         if (user && user !== 'undefined') {
             props.history.push('/')
         }
-    }, [props.loginPhase])
+    }, [props.loginPhase]
+    )
 
     return (
         <div className="container d-flex min-vh-100">
             <div className="row flex-grow-1 justify-content-center align-items-center">
                 <div className="col-lg-8">
                     <h4 className="text-center">Admin Login</h4>
+                    {props.loginError &&
+                        <div className="alert alert-danger" role="alert">
+                            <strong>Error!</strong> {props.loginError}
+                        </div>}
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="form-group">
                             <label htmlFor="exampleInputEmail1">Email address</label>
@@ -52,11 +56,13 @@ const AdminLogin = (props) => {
                                 className={errors.password ? 'form-control is-invalid' : 'form-control'}
                                 placeholder="Password"
                                 ref={register({
-                                    required: "Password is required"
+                                    required: "Password is required",
+                                    minLength: 5
                                 })}
                             />
                             <div className="invalid-feedback">
                                 {errors.password && errors.password.message}
+                                {errors.password?.type === 'minLength' && 'Your password is less than 5 digits'}
                             </div>
                         </div>
                         <button type="submit" className="btn btn-primary">Submit</button>
