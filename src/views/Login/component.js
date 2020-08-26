@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+// import FacebookLogin from 'react-facebook-login';
 
 export default class Login extends Component {
     constructor(props) {
@@ -9,16 +10,17 @@ export default class Login extends Component {
             email: '',
             password: ''
         }
-        this.inputHandler = this.inputHandler.bind(this)
-        this.onSubmit = this.onSubmit.bind(this)
+        this.inputHandler = this.inputHandler.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
+        // this.responseFacebook = this.responseFacebook.bind(this);
     }
 
-    componentDidUpdate(prevProps) {
-        console.log(this.props.loginPhase)
-        if (prevProps.loginPhase !== this.props.loginPhase) {
-            this.props.history.push('/')
-        }
-    }
+    // componentDidUpdate(prevProps) {
+    //     console.log(this.props.loginPhase)
+    //     if (prevProps.loginPhase !== this.props.loginPhase) {
+    //         this.props.history.push('/')
+    //     }
+    // }
 
     componentDidMount() {
         const user = localStorage.getItem('authToken')
@@ -38,6 +40,10 @@ export default class Login extends Component {
         this.props.loginUser(data);
     }
 
+    // responseFacebook = (response) => {
+    //     this.props.fbLogin(response)
+    // }
+
     render() {
         return (
             <div className="container d-flex min-vh-100">
@@ -55,7 +61,15 @@ export default class Login extends Component {
                                 <input onChange={this.inputHandler} name="password" type="password" className="form-control" id="exampleInputPassword1" placeholder="Password" />
                             </div>
                             <button onClick={this.onSubmit} type="submit" className="btn btn-primary">Submit</button>
-                            <small id="emailHelp" className="form-text text-muted">Don't have an account <Link to="/signup">Sign Up</Link> instead</small>
+                            <small id="emailHelp" className="form-text text-muted">Don't have an account <Link to="/signup">Sign Up</Link> instead or with <Link to="/adminlogin">Admin</Link></small>
+                            
+                            {/* <FacebookLogin
+                                cssClass="btn btn-primary btn-block mt-3"
+                                appId="195878658464696"
+                                autoLoad={true}
+                                fields="name,email,picture"
+                                onClick={this.componentClicked}
+                                callback={this.responseFacebook} /> */}
                         </form>
                     </div>
                 </div>

@@ -1,17 +1,16 @@
-import Login from './component';
+import AdminLogin from './component';
 import { connect } from 'react-redux';
 import { loginUser, fbLogin } from '../../store/user/duck'
 
-const LoginContainer = connect(
+const AdminLoginContainer = connect(
 	//map state to props
 	state => ({
         loginPhase: state.user.loginPhase
 	}),
 	//map dispatch to props
 	{
-		loginUser,
-		fbLogin
+		loginUser
 	}
-	)(Login)
+	)(AdminLogin)
 
-export default LoginContainer;
+export default AdminLoginContainer;

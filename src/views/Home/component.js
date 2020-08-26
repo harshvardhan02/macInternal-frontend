@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import parse from 'html-react-parser';
 import Header from '../Header/container';
 import Pagination from '../../components/Pagination';
-import { indexOf } from 'lodash';
+// import { indexOf } from 'lodash';
 
 export default class Home extends Component {
     constructor(props) {
@@ -125,12 +125,6 @@ export default class Home extends Component {
                             null
                     }
                     <div className="col-lg-8 offset-lg-2 pb-5">
-                        <div className="d-flex justify-content-between mt-3">
-                            <button type="button" className="btn btn-outline-primary">One</button>
-                            <button type="button" className="btn btn-outline-primary">Two</button>
-                            <button type="button" className="btn btn-outline-primary">Three</button>
-                            <button type="button" className="btn btn-outline-primary">Four</button>
-                        </div>
                         {currentPosts.map(post => (
                             <React.Fragment key={post._id}>
                                 <div className="card mt-4">
@@ -157,7 +151,7 @@ export default class Home extends Component {
                                 </div>
                             </React.Fragment>
                         ))}
-
+                        
                         <Pagination
                             itemsCount={posts.length}
                             pageSize={pageSize}

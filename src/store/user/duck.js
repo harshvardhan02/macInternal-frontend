@@ -47,6 +47,8 @@ export const CLEAR_PHASE = 'machineTest/user/CLEAR_PHASE'
 
 export const USER_LOGOUT = 'machineTest/user/USER_LOGOUT'
 
+export const FB_LOGIN = 'machineTest/user/FB_LOGIN';
+
 
 /***********************************
  * Initial State
@@ -71,7 +73,9 @@ const InitialStateInterface = {
   isSuccess: false,
   loginError: {},
   signUpPhase: INIT,
-  signUpError: {}
+  signUpError: {},
+  userDetails: {},
+  accessToken: null
 }
 
 class InitialState extends Record(InitialStateInterface) {
@@ -273,6 +277,14 @@ export default function (state = new InitialState(), action = {}) {
         .set('signUpPhase', INIT)
     }
 
+    case FB_LOGIN: {
+      const { payload } = action
+      localStorage.setItem('fbToken', payload.accessToken)
+      return state
+        .set('userDetails', payload)
+        .set('accessToken', payload.accessToken)
+    }
+
     default: {
       return state
     }
@@ -337,6 +349,14 @@ export const logout = data => {
   return {
     type: USER_LOGOUT,
     payload: data
+  }
+}
+
+export const fbLogin = credentials => {
+  console.log(credentials, 'duckfile')
+  return {
+    type: FB_LOGIN,
+    payload: credentials
   }
 }
 

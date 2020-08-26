@@ -13,7 +13,6 @@ export default class Footer extends Component {
             <div className="text-center bg-primary mt-5 fixed-bottom">
                 <div className="text-white">
                     {(new Date().getDate())}-{(new Date().getMonth())}-{(new Date().getFullYear())}
-                    {this.state.time}
                 </div>
             </div>
         )
