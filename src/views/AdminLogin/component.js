@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 
 const AdminLogin = (props) => {
     const { handleSubmit, register, errors } = useForm();
+    
     const onSubmit = values => {
         props.loginUser(values)
     };
@@ -23,8 +24,9 @@ const AdminLogin = (props) => {
                     <h4 className="text-center">Admin Login</h4>
                     {props.loginError &&
                         <div className="alert alert-danger" role="alert">
-                            <strong>Error!</strong> {props.loginError}
-                        </div>}
+                            <strong>Oops!</strong> {props.loginError}
+                        </div>
+                    }
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="form-group">
                             <label htmlFor="exampleInputEmail1">Email address</label>
