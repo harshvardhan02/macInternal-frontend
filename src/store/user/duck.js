@@ -49,6 +49,8 @@ export const USER_LOGOUT = 'machineTest/user/USER_LOGOUT'
 
 export const FB_LOGIN = 'machineTest/user/FB_LOGIN';
 
+export const GOOGLE_LOGIN = 'machineTest/user/GOOGLE_LOGIN'
+
 
 /***********************************
  * Initial State
@@ -75,7 +77,8 @@ const InitialStateInterface = {
   signUpPhase: INIT,
   signUpError: {},
   userDetails: {},
-  accessToken: null
+  accessToken: null,
+  profileObj: {}
 }
 
 class InitialState extends Record(InitialStateInterface) {
@@ -285,6 +288,15 @@ export default function (state = new InitialState(), action = {}) {
         .set('accessToken', payload.accessToken)
     }
 
+    case GOOGLE_LOGIN : {
+      const { payload } = action
+      console.log(payload);
+      localStorage.setItem('googleToken', payload.accessToken)
+      return state
+        .set('accessToken', payload.accessToken)
+        .set('profileObj', payload.profileObj)
+    }
+
     default: {
       return state
     }
@@ -356,6 +368,13 @@ export const fbLogin = credentials => {
   console.log(credentials, 'duckfile')
   return {
     type: FB_LOGIN,
+    payload: credentials
+  }
+}
+
+export const googleLogin = credentials => {
+  return {
+    type: GOOGLE_LOGIN,
     payload: credentials
   }
 }

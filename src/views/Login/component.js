@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-// import FacebookLogin from 'react-facebook-login';
+import FacebookLogin from 'react-facebook-login';
+import GoogleLogin from 'react-google-login';
 
 export default class Login extends Component {
     constructor(props) {
@@ -12,19 +13,32 @@ export default class Login extends Component {
         }
         this.inputHandler = this.inputHandler.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
-        // this.responseFacebook = this.responseFacebook.bind(this);
+        this.responseFacebook = this.responseFacebook.bind(this);
+        this.responseGoogle = this.responseGoogle.bind(this);
     }
 
-    // componentDidUpdate(prevProps) {
-    //     console.log(this.props.loginPhase)
-    //     if (prevProps.loginPhase !== this.props.loginPhase) {
-    //         this.props.history.push('/')
-    //     }
-    // }
+    componentDidUpdate(prevProps) {
+        console.log(prevProps.accessToken)
+        console.log(this.props.loginPhase)
+        if (prevProps.loginPhase !== this.props.loginPhase) {
+            this.props.history.push('/')
+        }
+        if (prevProps.accessToken !== this.props.accessToken) {
+            this.props.history.push('/')
+        }
+    }
 
     componentDidMount() {
         const user = localStorage.getItem('authToken')
+        const googleUser = localStorage.getItem('googleToken')
+        const fbUser = localStorage.getItem('fbToken')
         if (user && user !== 'undefined') {
+            this.props.history.push('/')
+        }
+        if (googleUser && googleUser !== 'undefined') {
+            this.props.history.push('/')
+        }
+        if ( fbUser && fbUser !== 'undefined') {
             this.props.history.push('/')
         }
     }
@@ -40,9 +54,14 @@ export default class Login extends Component {
         this.props.loginUser(data);
     }
 
-    // responseFacebook = (response) => {
-    //     this.props.fbLogin(response)
-    // }
+    responseFacebook = (response) => {
+        this.props.fbLogin(response)
+    }
+
+    responseGoogle = (response) => {
+        this.props.googleLogin(response)
+        // console.log(response);
+    }
 
     render() {
         return (
@@ -62,15 +81,29 @@ export default class Login extends Component {
                             </div>
                             <button onClick={this.onSubmit} type="submit" className="btn btn-primary">Submit</button>
                             <small id="emailHelp" className="form-text text-muted">Don't have an account <Link to="/signup">Sign Up</Link> instead or with <Link to="/adminlogin">Admin</Link></small>
-                            
-                            {/* <FacebookLogin
-                                cssClass="btn btn-primary btn-block mt-3"
+                        </form>
+                        <div className="w-75 align-items-center mt-3 text-center d-flex justify-content-between">
+                            <FacebookLogin
                                 appId="195878658464696"
-                                autoLoad={true}
+                                // autoLoad={true}
                                 fields="name,email,picture"
                                 onClick={this.componentClicked}
-                                callback={this.responseFacebook} /> */}
-                        </form>
+                                callback={this.responseFacebook}
+                                icon='fa fa-facebook'
+                                size='small'
+                                textButton='Login with Facebook'
+                            />
+
+                            <GoogleLogin
+                                clientId="14909510442-d7ki7bm4inpi4pelkqsikvnh0h416a3h.apps.googleusercontent.com"
+                                buttonText="Login with Google"
+                                onSuccess={this.responseGoogle}
+                                onFailure={this.responseGoogle}
+                                cookiePolicy={'single_host_origin'}
+                                isSignedIn={true}
+                                theme="dark"
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

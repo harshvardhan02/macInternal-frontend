@@ -16,7 +16,7 @@ import TimeSlotContainer from './views/Timeslot/container';
 import UpdatePostContainer from './views/UpdatePost/container';
 import SignUpContainer from './views/SignUp/container';
 import LoginContainer from './views/Login/container';
-import AdminLoginContainer from './views/AdminLogin/container';
+// import AdminLoginContainer from './views/AdminLogin/container';
 
 let route = '/login'
 if (window.location.origin !== 'http://localhost:3000') {
@@ -24,7 +24,7 @@ if (window.location.origin !== 'http://localhost:3000') {
 }
 
 const PrivateRoute = ({ component, ...rest }) => {
-	const isAuthed = (localStorage.getItem('authToken') || localStorage.getItem('fbToken')) ? true : false
+	const isAuthed = (localStorage.getItem('authToken')) || (localStorage.getItem('googleToken')) || (localStorage.getItem('fbToken')) ? true : false
 	return (
 		<Route {...rest} exact
 			render={props => (
@@ -55,7 +55,7 @@ class Root extends React.Component {
 						{/* <Route exact path="/" render={() => <Redirect to="/login" />} /> */}
 						<Route exact path={`${process.env.PUBLIC_URL}/signup`} component={SignUpContainer} {...this.props} />
 						<Route exact path={`${process.env.PUBLIC_URL}/login`} component={LoginContainer} {...this.props} />
-						<Route exact path={`${process.env.PUBLIC_URL}/adminlogin`} component={AdminLoginContainer} {...this.props} />
+						{/* <Route exact path={`${process.env.PUBLIC_URL}/adminlogin`} component={AdminLoginContainer} {...this.props} /> */}
 					</Switch>
 					<Footer />
 				</Router>
